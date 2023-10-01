@@ -1,5 +1,3 @@
-package fstahl.java;
-
 /**
  * Die Klasse WortBildManager speichert ein Wort und ein Bild zu diesem Wort.
  * @author Felix

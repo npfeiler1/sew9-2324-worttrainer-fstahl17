@@ -1,5 +1,3 @@
-package fstahl.java;
-
 /**
  * Die Klasse Statistik speichert die Statistik eines Spiels.
  * @author Felix

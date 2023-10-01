@@ -15,4 +15,6 @@ repositories {
 
 dependencies {
     implementation("org.json:json:20230618")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
 }

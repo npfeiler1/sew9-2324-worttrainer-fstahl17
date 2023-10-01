@@ -1,10 +1,13 @@
-package fstahl.java;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * Die Klasse Rechtschreibtrainer verwaltet die Wort-Bild-Paare und die Statistik eines Spiels.
@@ -28,8 +31,6 @@ public class Rechtschreibtrainer {
      * startet das Training.
      */
     public void starteTraining() {
-        // Hier kannst du die Trainingslogik implementieren.
-        // Zum Beispiel: Zufälliges Wort-Bild-Paar auswählen und den Trainingsprozess starten.
         waehleRandom();
     }
     /**
@@ -101,45 +102,52 @@ public class Rechtschreibtrainer {
     public WortBildManager getCurrentPaar() {
         return currentPaar;
     }
-    /*
-    public JSONObject convertToJSON() {
-        JSONObject j = new JSONObject();
 
-        // Wort-Bild-Paare in ein JSON-Array konvertieren
-        JSONArray jsonPaare = new JSONArray();
-        for (WortBildPaar wortBildPaar : wortBildPaare) {
-            JSONObject jsonPaare = new JSONObject();
-            jsonPaare.put("wort", wortBildPaar.getWort());
-            jsonPaare.put("bildURL", wortBildPaar.getBildURL());
-            jsonPaare.put(jsonPaare);
-        }
-        j.put("wortBildPaare", jsonPaare);
-
-        // Aktuelles Wort-Bild-Paar konvertieren
-        if (aktuellesWortBildPaar != null) {
-            JSONObject jsonAktuellesWortBildPaar = new JSONObject();
-            jsonAktuellesWortBildPaar.put("wort", aktuellesWortBildPaar.getWort());
-            jsonAktuellesWortBildPaar.put("bildURL", aktuellesWortBildPaar.getBildURL());
-            j.put("currentPaar", jsonAktuellesWortBildPaar);
-        }
-
-        // Statistiken konvertieren
-        JSONObject jsonStatistik = new JSONObject();
-        jsonStatistik.put("anzahlVersuche", statistik.getGesamtVersuche());
-        jsonStatistik.put("anzahlRichtig", statistik.getRichtigeAntworten());
-        jsonStatistik.put("anzahlFalsch", statistik.getFalscheAntworten());
-        j.put("statistik", jsonStatistik);
-
-        return j;
-    }
-
-    public void speichereJSONInDatei(String dateiName) {
+    public void saveToJSON(String dateiName){
+        JSONObject json = new JSONObject()
+                .put("wort",currentPaar.getWort())
+                .put("bildURL", currentPaar.getBildURL())
+                .put("currentIndex", paare.indexOf(currentPaar))
+                .put("gesamt",getStats().getGesamtVersuche())
+                .put("richtig",getStats().getRichtigeVersuche())
+                .put("falsch",getStats().getFalscheVersuche())
+                .put("liste",paare);
         try (FileWriter fileWriter = new FileWriter(dateiName)) {
-            JSONObject j = convertToJSON();
-            j.write(fileWriter);
+            json.write(fileWriter);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    */
+
+    public void loadFromJSON(String dateipfad){
+        int gesamt,richtig,falsch, index;
+        try (FileReader reader = new FileReader(dateipfad)) {
+            JSONTokener tokener = new JSONTokener(reader);
+            JSONObject js = new JSONObject(tokener);
+            String currentWort = js.getString("wort");
+            String currentBildURL = js.getString("bildURL");
+            gesamt = (int) js.get("gesamt");
+            richtig = (int) js.get("richtig");
+            falsch = (int) js.get("falsch");
+            index = (int) js.get("currentIndex");
+
+            JSONArray list = js.getJSONArray("liste");
+            for (int i = 0; i < list.length(); i++) {
+                String wort_id = list.getJSONObject(i).getString("wort");
+                System.out.println("wort: " + wort_id);
+                String url_id = list.getJSONObject(i).getString("bildURL");
+                this.addPaare(wort_id,url_id);
+            }
+
+            this.currentPaar = paare.get(index);
+            this.stats.setGesamtVersuche(gesamt);
+            this.stats.setRichtigeVersuche(richtig);
+            this.stats.setFalscheVersuche(falsch);
+
+            waehlePaar(index);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

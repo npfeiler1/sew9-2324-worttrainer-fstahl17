@@ -89,4 +89,14 @@ public class Rechtschreibtrainer {
         paare.add(neuesWortBildPaar);
     }
 
+    /**
+     * Gibt Statistik zurück
+     */
+    public Statistik getStats(){
+        return this.stats;
+    }
+
+    public WortBildManager getCurrentPaar() {
+        return currentPaar;
+    }
 }

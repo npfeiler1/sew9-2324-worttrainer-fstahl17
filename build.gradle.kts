@@ -4,3 +4,15 @@
  * This is a general purpose Gradle build.
  * To learn more about Gradle by exploring our Samples at https://docs.gradle.org/8.3/samples
  */
+
+plugins {
+    kotlin("jvm") version "1.9.0"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("org.json:json:20230618")
+}

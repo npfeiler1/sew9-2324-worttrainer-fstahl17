@@ -90,6 +90,9 @@ public class Rechtschreibtrainer {
     public void addPaare(String wort, String bildURL) {
         WortBildManager neuesWortBildPaar = new WortBildManager(wort, bildURL);
         paare.add(neuesWortBildPaar);
+        if(currentPaar == null){
+            currentPaar = neuesWortBildPaar;
+        }
     }
 
     /**
@@ -132,6 +135,7 @@ public class Rechtschreibtrainer {
             index = (int) js.get("currentIndex");
 
             JSONArray list = js.getJSONArray("liste");
+            this.paare = new ArrayList<>();
             for (int i = 0; i < list.length(); i++) {
                 String wort_id = list.getJSONObject(i).getString("wort");
                 System.out.println("wort: " + wort_id);
@@ -149,5 +153,9 @@ public class Rechtschreibtrainer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<WortBildManager> getPaare() {
+        return paare;
     }
 }

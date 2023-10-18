@@ -18,9 +18,11 @@ public class Main {
         String text;
         String input;
 
+        SaveLoad saveLoad = new SaveJSON();
+
         if(new File("test.json").exists()){
             Rechtschreibtrainer rr = new Rechtschreibtrainer();
-            rr.loadFromJSON("test.json");
+            saveLoad.loadFromJSON(rr,"test.json");
             while(true){
                 rr.starteTraining();
 
@@ -46,7 +48,7 @@ public class Main {
                 rr.rateWort(input);
                 text = "Gesamt: " + rr.getStats().getGesamtVersuche() + "\nRichtig: " + rr.getStats().getRichtigeVersuche() + "\nFalsch: " + rr.getStats().getFalscheVersuche();
                 JOptionPane.showMessageDialog(null, text);
-                rr.saveToJSON("test.json");
+                saveLoad.saveToJSON(rr,"test.json");
             }
         } else {
             while (true) {
@@ -73,7 +75,7 @@ public class Main {
                 r.rateWort(input);
                 text = "Gesamt: " + r.getStats().getGesamtVersuche() + "\nRichtig: " + r.getStats().getRichtigeVersuche() + "\nFalsch: " + r.getStats().getFalscheVersuche();
                 JOptionPane.showMessageDialog(null, text);
-                r.saveToJSON("test.json");
+                saveLoad.saveToJSON(r,"test.json");
             }
         }
     }

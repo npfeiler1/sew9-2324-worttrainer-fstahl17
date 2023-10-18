@@ -21,7 +21,6 @@ public class MainTest {
      */
     @Test
     public void testAddWort() {
-        clear();
         trainer.addPaare("Mercedes","https://flotte.at/NewsImages-870x580/pic4645_1-die-wertvollsten-automarken-der-welt.jpg");
         assertEquals(1,trainer.getPaare().size());
     }
@@ -33,7 +32,8 @@ public class MainTest {
     public void testSaveJSON() {
         clear();
         trainer.addPaare("Mercedes","https://flotte.at/NewsImages-870x580/pic4645_1-die-wertvollsten-automarken-der-welt.jpg");
-        trainer.saveToJSON("testTest.json");
+        SaveLoad saveLoad = new SaveJSON();
+        saveLoad.saveToJSON(trainer,"testTest.json");
 
         File jsonFile = new File("testTest.json");
         assertTrue(jsonFile.exists());
@@ -49,9 +49,11 @@ public class MainTest {
         clear();
         trainer.addPaare("Mercedes","https://flotte.at/NewsImages-870x580/pic4645_1-die-wertvollsten-automarken-der-welt.jpg");
         trainer.addPaare("Maserati","https://i.pinimg.com/originals/5e/5f/0f/5e5f0f05f9703fa3db0cc93b5d2c8578.png");
-        trainer.saveToJSON("testLoad.json");
+        SaveLoad saveLoad = new SaveJSON();
+        saveLoad.saveToJSON(trainer,"testLoad.json");
 
-        trainer.loadFromJSON("testLoad.json");
+        SaveLoad load = new SaveJSON();
+        load.loadFromJSON(trainer,"testLoad.json");
         assertEquals(2,trainer.getPaare().size());
     }
 }

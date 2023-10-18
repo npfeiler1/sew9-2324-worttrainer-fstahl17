@@ -106,53 +106,16 @@ public class Rechtschreibtrainer {
         return currentPaar;
     }
 
-    public void saveToJSON(String dateiName){
-        JSONObject json = new JSONObject()
-                .put("wort",currentPaar.getWort())
-                .put("bildURL", currentPaar.getBildURL())
-                .put("currentIndex", paare.indexOf(currentPaar))
-                .put("gesamt",getStats().getGesamtVersuche())
-                .put("richtig",getStats().getRichtigeVersuche())
-                .put("falsch",getStats().getFalscheVersuche())
-                .put("liste",paare);
-        try (FileWriter fileWriter = new FileWriter(dateiName)) {
-            json.write(fileWriter);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setPaare(List<WortBildManager> paare) {
+        this.paare = paare;
     }
 
-    public void loadFromJSON(String dateipfad){
-        int gesamt,richtig,falsch, index;
-        try (FileReader reader = new FileReader(dateipfad)) {
-            JSONTokener tokener = new JSONTokener(reader);
-            JSONObject js = new JSONObject(tokener);
-            String currentWort = js.getString("wort");
-            String currentBildURL = js.getString("bildURL");
-            gesamt = (int) js.get("gesamt");
-            richtig = (int) js.get("richtig");
-            falsch = (int) js.get("falsch");
-            index = (int) js.get("currentIndex");
+    public void setCurrentPaar(WortBildManager currentPaar) {
+        this.currentPaar = currentPaar;
+    }
 
-            JSONArray list = js.getJSONArray("liste");
-            this.paare = new ArrayList<>();
-            for (int i = 0; i < list.length(); i++) {
-                String wort_id = list.getJSONObject(i).getString("wort");
-                System.out.println("wort: " + wort_id);
-                String url_id = list.getJSONObject(i).getString("bildURL");
-                this.addPaare(wort_id,url_id);
-            }
-
-            this.currentPaar = paare.get(index);
-            this.stats.setGesamtVersuche(gesamt);
-            this.stats.setRichtigeVersuche(richtig);
-            this.stats.setFalscheVersuche(falsch);
-
-            waehlePaar(index);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setStats(Statistik stats) {
+        this.stats = stats;
     }
 
     public List<WortBildManager> getPaare() {
